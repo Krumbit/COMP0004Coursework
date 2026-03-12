@@ -1,9 +1,6 @@
 package uk.ac.ucl.model;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -54,6 +51,20 @@ public class Model
         return rows;
     }
 
+    /**
+     *
+     * @param id The patient ID
+     * @return An optional integer representing the row of the patient
+     */
+    public Optional<Integer> searchById(String id) {
+        for (int i = 0; i < dataFrame.getRowCount(); i++) {
+            if (dataFrame.getValue("ID", i).equals(id)) {
+                return Optional.of(i);
+            }
+        }
+        return Optional.empty();
+    }
+
     public List<Integer> getRows(String query, String sortCol, String sortDir) {
         List<Integer> visibleRows = searchFor(query);
 
@@ -76,7 +87,7 @@ public class Model
         return visibleRows;
     }
 
-    public List<Integer> getAllRows() {
+    private List<Integer> getAllRows() {
         return IntStream.range(0, dataFrame.getRowCount()).boxed().collect(Collectors.toList());
     }
 
