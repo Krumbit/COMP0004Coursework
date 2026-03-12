@@ -56,7 +56,7 @@ public class Model
 
         if (
                 sortCol != null
-                && sortCol.trim().isEmpty()
+                && !sortCol.trim().isEmpty()
                 && dataFrame.getColumnNames().contains(sortCol.toUpperCase(Locale.ROOT))
         ) {
             Comparator<Integer> comparator = Comparator.comparing(row ->
