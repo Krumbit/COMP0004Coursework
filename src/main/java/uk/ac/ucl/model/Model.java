@@ -21,7 +21,9 @@ public class Model
     private Model() {}
 
     public void loadData(String filePath) {
-        dataFrame = DataLoader.load(filePath);
+        if (dataFrame == null) {
+            dataFrame = DataLoader.load(filePath);
+        }
     }
 
     public DataFrame getDataFrame() {
