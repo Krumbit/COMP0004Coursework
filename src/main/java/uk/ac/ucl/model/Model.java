@@ -1,8 +1,11 @@
 package uk.ac.ucl.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Model
 {
@@ -30,9 +33,12 @@ public class Model
      * @param query The query to search for
      * @return A (possibly empty) list of rows where the query was found
      */
-    public List<Integer> searchFor(String query) {
-        List<Integer> rows = new ArrayList<>();
+    private List<Integer> searchFor(String query) {
+        if (query.isEmpty()) {
+            return getAllRows();
+        }
 
+        List<Integer> rows = new ArrayList<>();
         for (int i = 0; i < dataFrame.getRowCount(); i++) {
             for (String col : QUERYABLE_COLUMNS) {
                 if (dataFrame.getValue(col, i).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) {
@@ -42,6 +48,32 @@ public class Model
         }
 
         return rows;
+    }
+
+    public List<Integer> getRows(String query, String sortCol, String sortDir) {
+        List<Integer> visibleRows = searchFor(query);
+
+        if (
+                sortCol != null
+                && sortCol.trim().isEmpty()
+                && dataFrame.getColumnNames().contains(sortCol.toUpperCase(Locale.ROOT))
+        ) {
+            Comparator<Integer> comparator = Comparator.comparing(row ->
+                    dataFrame.getValue(sortCol, row)
+            );
+
+            if (sortDir.equals("desc")) {
+                comparator = comparator.reversed();
+            }
+
+            visibleRows.sort(comparator);
+        }
+
+        return visibleRows;
+    }
+
+    public List<Integer> getAllRows() {
+        return IntStream.range(0, dataFrame.getRowCount()).boxed().collect(Collectors.toList());
     }
 
     public static Model getInstance() {

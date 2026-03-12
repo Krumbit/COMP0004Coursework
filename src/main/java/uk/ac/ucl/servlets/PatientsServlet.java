@@ -9,11 +9,7 @@ import uk.ac.ucl.model.DataFrame;
 import uk.ac.ucl.model.Model;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @WebServlet("/patients")
 public class PatientsServlet extends HttpServlet {
@@ -27,34 +23,18 @@ public class PatientsServlet extends HttpServlet {
         String sortCol = req.getParameter("sort");
         String sortDir = req.getParameter("direction");
 
-        List<Integer> visibleRows;
-        if (query != null && !query.trim().isEmpty()) {
-            visibleRows = model.searchFor(query);
-            req.setAttribute("search", query);
-        } else {
-            visibleRows = IntStream.range(0, dataFrame.getRowCount()).boxed().collect(Collectors.toList());
-            req.setAttribute("search", "");
+        if (query == null) {
+            query = "";
         }
 
-        if (sortCol != null && !sortCol.trim().isEmpty() && dataFrame.getColumnNames().contains(sortCol.toUpperCase(Locale.ROOT))) {
-            if (sortDir == null || !List.of("asc", "desc").contains(sortDir)) {
-                sortDir = "desc";
-            }
-
-            Comparator<Integer> comparator = Comparator.comparing(row ->
-                    dataFrame.getValue(sortCol, row)
-            );
-
-            if (sortDir.equals("desc")) {
-                comparator = comparator.reversed();
-            }
-
-            visibleRows.sort(comparator);
+        if (sortDir == null || !List.of("asc", "desc").contains(sortDir)) {
+            sortDir = "desc";
         }
 
         req.setAttribute("dataFrame", dataFrame);
+        req.setAttribute("search", query);
         req.setAttribute("visibleColumns", Model.VISIBLE_COLUMNS);
-        req.setAttribute("visibleRows", visibleRows);
+        req.setAttribute("visibleRows", model.getRows(query, sortCol, sortDir));
         req.getRequestDispatcher("patients.jsp").forward(req, res);
     }
 }
