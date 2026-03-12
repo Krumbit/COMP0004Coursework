@@ -11,10 +11,10 @@ public class Model
 {
     private static Model instance;
     private DataFrame dataFrame;
-    public final static List<String> VISIBLE_COLUMNS = List.of(
+    public static final List<String> VISIBLE_COLUMNS = List.of(
             "FIRST", "LAST", "GENDER", "BIRTHDATE", "CITY", "STATE"
     );
-    private final static List<String> QUERYABLE_COLUMNS = List.of(
+    private static final List<String> QUERYABLE_COLUMNS = List.of(
             "ID", "FIRST", "LAST", "SSN", "DRIVERS", "PASSPORT", "ADDRESS", "CITY", "STATE", "ZIP"
     );
 
@@ -43,6 +43,7 @@ public class Model
             for (String col : QUERYABLE_COLUMNS) {
                 if (dataFrame.getValue(col, i).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) {
                     rows.add(i);
+                    break;
                 }
             }
         }
