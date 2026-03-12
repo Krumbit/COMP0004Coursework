@@ -37,4 +37,8 @@ public class DataFrame {
     public void addValue(String colName, String value) {
         columns.get(colName).addRowValue(value);
     }
+
+    public boolean isColumnRequired(String colName) {
+        return columns.get(colName).isRequired();
+    }
 }

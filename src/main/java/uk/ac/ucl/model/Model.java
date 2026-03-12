@@ -56,7 +56,7 @@ public class Model
      * @param id The patient ID
      * @return An optional integer representing the row of the patient
      */
-    public Optional<Integer> searchById(String id) {
+    public Optional<Integer> findById(String id) {
         for (int i = 0; i < dataFrame.getRowCount(); i++) {
             if (dataFrame.getValue("ID", i).equals(id)) {
                 return Optional.of(i);
@@ -89,6 +89,17 @@ public class Model
 
     private List<Integer> getAllRows() {
         return IntStream.range(0, dataFrame.getRowCount()).boxed().collect(Collectors.toList());
+    }
+
+    public void addPatient(Map<String, String> values) {
+        values.put("ID", UUID.randomUUID().toString());
+
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            String col = entry.getKey();
+            String value = entry.getValue();
+
+            dataFrame.addValue(col, value);
+        }
     }
 
     public static Model getInstance() {

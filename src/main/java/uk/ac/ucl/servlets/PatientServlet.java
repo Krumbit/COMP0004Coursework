@@ -23,7 +23,7 @@ public class PatientServlet extends HttpServlet {
         Model model = Model.getInstance();
         model.loadData("data/patients100.csv");
         String id = pathInfo.substring(1);
-        Optional<Integer> row = model.searchById(id);
+        Optional<Integer> row = model.findById(id);
 
         if (row.isPresent()) {
             req.setAttribute("dataFrame", model.getDataFrame());
