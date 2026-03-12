@@ -38,10 +38,11 @@ public class Model
             return getAllRows();
         }
 
+        String lowerQuery = query.toLowerCase(Locale.ROOT);
         List<Integer> rows = new ArrayList<>();
         for (int i = 0; i < dataFrame.getRowCount(); i++) {
             for (String col : QUERYABLE_COLUMNS) {
-                if (dataFrame.getValue(col, i).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) {
+                if (dataFrame.getValue(col, i).toLowerCase(Locale.ROOT).contains(lowerQuery)) {
                     rows.add(i);
                     break;
                 }
