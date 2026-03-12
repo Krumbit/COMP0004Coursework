@@ -1,3 +1,21 @@
-.clearBoth {
-  clear: both;
+main {
+  margin-block: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.square {
+  aspect-ratio: 1;
+}
+
+.sort-buttons {
+  display: inline-block;
+}
+
+.sort-buttons > a {
+  --bs-btn-padding-y: .15rem;
+  --bs-btn-padding-x: .4rem;
+  --bs-btn-font-size: 0.75rem;
 }

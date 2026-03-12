@@ -30,6 +30,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 // Tomcat API: default WebResourceRoot implementation.
 import org.apache.catalina.webresources.StandardRoot;
+import uk.ac.ucl.model.DataLoader;
 
 // This class contains only static helper methods and a main() entry point.
 // In production code you might encapsulate configuration and server startup into separate classes.
@@ -179,6 +180,7 @@ public class Main
     // Create the embedded Tomcat instance.
     final Tomcat tomcat = new Tomcat();
 
+    DataLoader.load("data/patients100.csv");
     try
     {
       // Configure the TCP port Tomcat will listen on.
