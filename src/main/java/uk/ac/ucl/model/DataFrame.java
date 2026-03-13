@@ -38,6 +38,10 @@ public class DataFrame {
         columns.get(colName).addRowValue(value);
     }
 
+    public void removeRow(String colName, int row) {
+        columns.get(colName).removeRow(row);
+    }
+
     public boolean isColumnRequired(String colName) {
         return columns.get(colName).isRequired();
     }

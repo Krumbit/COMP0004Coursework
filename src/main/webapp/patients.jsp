@@ -46,7 +46,7 @@
 
     <div class="w-100">
         <div class="d-flex justify-content-between align-items-center my-2">
-            <span>Results: <%=rows.size() %></span>
+            <span>Results: <%=rows != null ? rows.size() : 0 %></span>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPatientModal">
                 Add
             </button>

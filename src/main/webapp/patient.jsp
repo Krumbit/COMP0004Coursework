@@ -4,6 +4,7 @@
     DataFrame dataFrame = (DataFrame) request.getAttribute("dataFrame");
     Boolean showSavedAlert = (Boolean) request.getAttribute("showSavedAlert");
     int row = (int) request.getAttribute("row");
+    String id = dataFrame.getValue("ID", row);
 %>
 
 <html>
@@ -21,7 +22,7 @@
     <a href="/patients">← All patients</a>
     <h1 class="my-4">Patient Info</h1>
     <div class="container row">
-        <form action="/editPatient/<%= dataFrame.getValue("ID", row) %>" method="post">
+        <form action="/editPatient/<%= id %>" method="post">
             <% for (String col : dataFrame.getColumnNames()) { %>
             <div class="mb-2">
                 <label class="form-label"><%= col %></label>
@@ -29,6 +30,7 @@
             </div>
             <% } %>
             <button class="btn btn-warning" type="submit">Save Edits</button>
+            <a href="/deletePatient/<%= id %>" class="btn btn-danger">Delete</a>
         </form>
     </div>
 </main>

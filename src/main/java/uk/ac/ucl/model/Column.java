@@ -42,6 +42,10 @@ public class Column {
         rows.add(value);
     }
 
+    public void removeRow(int row) {
+        rows.remove(row);
+    }
+
     public boolean isRequired() {
         return required;
     }

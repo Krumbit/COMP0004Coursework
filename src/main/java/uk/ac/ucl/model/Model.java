@@ -114,6 +114,17 @@ public class Model
         }
     }
 
+    public void removePatient(String id) throws IllegalArgumentException {
+        Optional<Integer> row = findById(id);
+        if (row.isEmpty()) {
+            throw new IllegalArgumentException("Could not remove patient " + id + ": Patient does not exist.");
+        }
+
+        for (String col : dataFrame.getColumnNames()) {
+            dataFrame.removeRow(col, row.get());
+        }
+    }
+
     public static Model getInstance() {
         if (instance == null) {
             instance = new Model();
