@@ -23,7 +23,7 @@
 <body>
 <main class="container-sm px-5">
     <% if (error != null && !error.isEmpty()) { %>
-    <div class="alert alert-danger"><%= error %></div>
+    <div class="alert alert-danger" role="alert"><%= error %></div>
     <% } %>
 
     <h1 class="mb-4">Patient Data</h1>
@@ -41,7 +41,7 @@
             >
         </div>
         <button type="submit" class="btn btn-primary">Search</button>
-        <a href="/patients" class="btn btn-secondary square h-100">⟳</a>
+        <a href="/patients" class="btn btn-secondary square h-100 reset-button">⟳</a>
     </form>
 
     <div class="w-100">
@@ -59,7 +59,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <% for (String col : dataFrame.getColumnNames().stream().filter(col -> !col.equals("ID")).toList()) {
+                        <% for (String col : dataFrame.getColumnNames()) {
+                            if (col.equals("ID")) continue;
                             boolean isRequired = dataFrame.isColumnRequired(col);
                         %>
                             <div class="mb-3">

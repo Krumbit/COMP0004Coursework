@@ -19,3 +19,13 @@ main {
   --bs-btn-padding-x: .4rem;
   --bs-btn-font-size: 0.75rem;
 }
+
+.reset-button {
+  --bs-btn-padding-y: 0.15rem;
+  --bs-btn-padding-x: 0.25rem;
+  --bs-btn-font-size: 2rem;
+}
+
+.reset-button > * {
+  height: fit-content;
+}

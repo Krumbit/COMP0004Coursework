@@ -102,6 +102,18 @@ public class Model
         }
     }
 
+    public void editPatient(int row, Map<String, String> values) {
+        // ID should be immutable, so we remove the column key if client tries changing it
+        values.remove("ID");
+
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            String col = entry.getKey();
+            String value = entry.getValue();
+
+            dataFrame.putValue(col, row, value);
+        }
+    }
+
     public static Model getInstance() {
         if (instance == null) {
             instance = new Model();
