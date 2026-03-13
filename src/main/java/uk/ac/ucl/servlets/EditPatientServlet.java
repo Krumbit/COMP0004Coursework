@@ -5,13 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import uk.ac.ucl.model.DataFrame;
 import uk.ac.ucl.model.Model;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @WebServlet("/editPatient/*")
 public class EditPatientServlet extends HttpServlet {
@@ -30,15 +30,7 @@ public class EditPatientServlet extends HttpServlet {
         }
 
         Model model = Model.getInstance();
-        model.loadData("data/patients100.csv");
-
         String id = pathInfo.substring(1);
-        Optional<Integer> row = model.findById(id);
-        if (row.isEmpty()) {
-            res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            req.getRequestDispatcher("/not-found.jsp").forward(req, res);
-            return;
-        }
 
         Map<String, String> values = new LinkedHashMap<>();
         for (String col : model.getDataFrame().getColumnNames()) {
@@ -46,11 +38,14 @@ public class EditPatientServlet extends HttpServlet {
             values.put(col, value != null ? value : "");
         }
 
-        model.editPatient(row.get(), values);
+        try {
+            model.editPatient(id, values);
+        } catch (IllegalArgumentException e) {
+            String encoded = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            res.sendRedirect("/patients?error=" + encoded);
+            return;
+        }
 
-        req.setAttribute("dataFrame", model.getDataFrame());
-        req.setAttribute("row", row.get());
-        req.setAttribute("showSavedAlert", true);
-        req.getRequestDispatcher("/patient.jsp").forward(req, res);
+        res.sendRedirect("/patient/" + id);
     }
 }

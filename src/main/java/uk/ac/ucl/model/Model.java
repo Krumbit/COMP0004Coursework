@@ -91,6 +91,18 @@ public class Model
         return IntStream.range(0, dataFrame.getRowCount()).boxed().collect(Collectors.toList());
     }
 
+    public Map<String, String> getPatientData(String id) throws IllegalArgumentException {
+        int row = findById(id).orElseThrow(() -> new IllegalArgumentException("Could not get patient " + id + ": Patient does not exist."));
+
+        Map<String, String> data = new LinkedHashMap<>();
+        for (String col : dataFrame.getColumnNames()) {
+            String value = dataFrame.getValue(col, row);
+            data.put(col, value);
+        }
+
+        return data;
+    }
+
     public void addPatient(Map<String, String> values) {
         values.put("ID", UUID.randomUUID().toString());
 
@@ -102,11 +114,13 @@ public class Model
         }
     }
 
-    public void editPatient(int row, Map<String, String> values) {
-        // ID should be immutable, so we remove the column key if client tries changing it
-        values.remove("ID");
+    public void editPatient(String id, Map<String, String> newValues) throws IllegalArgumentException {
+        int row = findById(id).orElseThrow(() -> new IllegalArgumentException("Could not edit patient " + id + ": Patient does not exist."));
 
-        for (Map.Entry<String, String> entry : values.entrySet()) {
+        // ID should be immutable, so we remove the column key if client tries changing it
+        newValues.remove("ID");
+
+        for (Map.Entry<String, String> entry : newValues.entrySet()) {
             String col = entry.getKey();
             String value = entry.getValue();
 
@@ -115,19 +129,17 @@ public class Model
     }
 
     public void removePatient(String id) throws IllegalArgumentException {
-        Optional<Integer> row = findById(id);
-        if (row.isEmpty()) {
-            throw new IllegalArgumentException("Could not remove patient " + id + ": Patient does not exist.");
-        }
+        int row = findById(id).orElseThrow(() -> new IllegalArgumentException("Could not remove patient " + id + ": Patient does not exist."));
 
         for (String col : dataFrame.getColumnNames()) {
-            dataFrame.removeRow(col, row.get());
+            dataFrame.removeRow(col, row);
         }
     }
 
     public static Model getInstance() {
         if (instance == null) {
             instance = new Model();
+            instance.loadData("data/patients100.csv");
         }
 
         return instance;

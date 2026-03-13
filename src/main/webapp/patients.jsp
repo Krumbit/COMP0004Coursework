@@ -1,6 +1,5 @@
 <%@ page import="uk.ac.ucl.model.DataFrame" %>
 <%@ page import="java.util.List" %>
-<%@ page import="uk.ac.ucl.model.Column" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

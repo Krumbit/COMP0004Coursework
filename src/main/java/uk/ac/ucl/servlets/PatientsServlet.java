@@ -18,7 +18,6 @@ public class PatientsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         Model model = Model.getInstance();
-        model.loadData("data/patients100.csv");
         DataFrame dataFrame = model.getDataFrame();
 
         String query = req.getParameter("search");

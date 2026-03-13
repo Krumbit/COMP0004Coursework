@@ -22,8 +22,6 @@ public class DeletePatientServlet extends HttpServlet {
         }
 
         Model model = Model.getInstance();
-        model.loadData("data/patients100.csv");
-
         String id = pathInfo.substring(1);
 
         try {

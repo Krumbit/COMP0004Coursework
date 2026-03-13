@@ -1,10 +1,9 @@
-<%@ page import="uk.ac.ucl.model.DataFrame" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    DataFrame dataFrame = (DataFrame) request.getAttribute("dataFrame");
-    Boolean showSavedAlert = (Boolean) request.getAttribute("showSavedAlert");
-    int row = (int) request.getAttribute("row");
-    String id = dataFrame.getValue("ID", row);
+    String id = (String) request.getAttribute("id");
+    @SuppressWarnings("unchecked")
+    Map<String, String> data = (Map<String, String>) request.getAttribute("data");
 %>
 
 <html>
@@ -14,19 +13,17 @@
 </head>
 <body>
 <main>
-    <% if (Boolean.TRUE.equals(showSavedAlert)) {%>
-    <div class="alert alert-success" role="alert">
-        Saved changes!
-    </div>
-    <%}%>
     <a href="/patients">← All patients</a>
     <h1 class="my-4">Patient Info</h1>
     <div class="container row">
         <form action="/editPatient/<%= id %>" method="post">
-            <% for (String col : dataFrame.getColumnNames()) { %>
+            <% for (Map.Entry<String, String> entry : data.entrySet()) {
+                String col = entry.getKey();
+                String value = entry.getValue();
+            %>
             <div class="mb-2">
                 <label class="form-label"><%= col %></label>
-                <input class="form-control" type="text" name="<%= col %>" value="<%= dataFrame.getValue(col, row) %>" <%= col.equals("ID") ? "readonly" : "" %>>
+                <input class="form-control" type="text" name="<%= col %>" value="<%= value %>" <%= col.equals("ID") ? "readonly" : "" %>>
             </div>
             <% } %>
             <button class="btn btn-warning" type="submit">Save Edits</button>

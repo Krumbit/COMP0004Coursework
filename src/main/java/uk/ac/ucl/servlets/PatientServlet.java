@@ -8,7 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import uk.ac.ucl.model.Model;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @WebServlet("/patient/*")
 public class PatientServlet extends HttpServlet {
@@ -21,18 +23,16 @@ public class PatientServlet extends HttpServlet {
         }
 
         Model model = Model.getInstance();
-        model.loadData("data/patients100.csv");
         String id = pathInfo.substring(1);
-        Optional<Integer> row = model.findById(id);
 
-        if (row.isEmpty()) {
-            res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            req.getRequestDispatcher("/not-found.jsp").forward(req, res);
-            return;
+        try {
+            Map<String, String> data = model.getPatientData(id);
+            req.setAttribute("id", id);
+            req.setAttribute("data", data);
+            req.getRequestDispatcher("/patient.jsp").forward(req, res);
+        } catch (IllegalArgumentException e) {
+            String encoded = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            res.sendRedirect("/patients?error=" + encoded);
         }
-
-        req.setAttribute("dataFrame", model.getDataFrame());
-        req.setAttribute("row", row.get());
-        req.getRequestDispatcher("/patient.jsp").forward(req, res);
     }
 }
